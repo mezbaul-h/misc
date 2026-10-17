@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Download the assets from the supplied screenshots into an existing ComfyUI.
+# Download the original assets plus the five additional LoRAs into an existing ComfyUI.
 # Required environment variables (no defaults): HF_TOKEN, COMFYUI_BASE_DIR.
 # Dependencies: Bash, curl, Python 3 (standard library only).
 #
@@ -52,7 +52,8 @@ hf_curl --silent --show-error --output "$work_dir/public.json" \
     'https://huggingface.co/api/models/vantagewithai/Krea-2-Turbo-GGUF?blobs=true' ||
     die 'Cannot read vantagewithai/Krea-2-Turbo-GGUF.'
 
-# Exact screenshot manifest. No private-repository diffuser is downloaded.
+# Original screenshot assets plus five additional LoRAs.
+# No private-repository diffuser is downloaded.
 # Pin both repositories to the API's commit so retries use the same bytes.
 python3 - "$work_dir" <<'PY' > "$work_dir/manifest.tsv"
 import json
@@ -72,6 +73,11 @@ assets = [
     ("private", "hand_yolov8s.pt", "models/ultralytics/bbox"),
     ("private", "image_krea2_turbo_t2i_v3.json", "user/default/workflows"),
     ("private", "qwen_image_vae.safetensors", "models/vae"),
+    ("private", "yara_lora_v2_000002000.safetensors", "models/loras"),
+    ("private", "yara_lora_v2_000002250.safetensors", "models/loras"),
+    ("private", "yara_lora_v2_000002500.safetensors", "models/loras"),
+    ("private", "yara_lora_v2_000002750.safetensors", "models/loras"),
+    ("private", "snofs_krea_v1_5.safetensors", "models/loras"),
     ("public", "krea2_turbo-Q8_0.gguf", "models/unet"),
 ]
 repos = {"private": "mezattn/krea2-turbo", "public": "vantagewithai/Krea-2-Turbo-GGUF"}
@@ -83,7 +89,7 @@ for key, name, directory in assets:
         sys.exit(f"Invalid repository revision for {repos[key]}")
     files = {item["rfilename"]: item for item in info.get("siblings", [])}
     if name not in files:
-        sys.exit(f"Required screenshot file missing from {repos[key]}: {name}")
+        sys.exit(f"Required file missing from {repos[key]}: {name}")
     item = files[name]
     lfs = item.get("lfs") or {}
     size = lfs.get("size", item.get("size"))
@@ -161,7 +167,7 @@ while IFS=$'\t' read -r url relative_path size algorithm digest; do
     printf 'Installed and verified: %s\n' "$relative_path"
 done < "$work_dir/manifest.tsv"
 
-printf '\nDone: all 10 files installed and verified.\n'
+printf '\nDone: all 15 files installed and verified.\n'
 printf 'Workflow: %s/user/default/workflows/image_krea2_turbo_t2i_v3.json\n' "$COMFYUI_BASE_DIR"
 printf '%s\n' \
     'Diffuser: krea2_turbo-Q8_0.gguf (8-bit GGUF, not FP8).' \
