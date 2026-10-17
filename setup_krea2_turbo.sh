@@ -73,6 +73,7 @@ assets = [
     ("private", "hand_yolov8s.pt", "models/ultralytics/bbox"),
     ("private", "image_krea2_turbo_t2i_v3.json", "user/default/workflows"),
     ("private", "image_krea2_turbo_t2i_v5.json", "user/default/workflows"),
+    ("private", "image_krea2_turbo_t2i_v6.json", "user/default/workflows"),
     ("private", "qwen_image_vae.safetensors", "models/vae"),
     ("private", "yara_lora_v2_000002000.safetensors", "models/loras"),
     ("private", "yara_lora_v2_000002250.safetensors", "models/loras"),
