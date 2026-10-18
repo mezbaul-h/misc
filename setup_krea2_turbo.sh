@@ -78,6 +78,8 @@ assets = [
     ("private", "yara_lora_v2_000002500.safetensors", "models/loras"),
     ("private", "yara_lora_v2_000002750.safetensors", "models/loras"),
     ("private", "snofs_krea_v1_5.safetensors", "models/loras"),
+    ("private", "breast_fake_real_krea2_loraholic.safetensors", "models/loras"),
+    ("private", "breast_size_v2_krea2_loraholic.safetensors", "models/loras"),
     ("public", "krea2_turbo-Q8_0.gguf", "models/unet"),
 ]
 repos = {"private": "mezattn/krea2-turbo", "public": "vantagewithai/Krea-2-Turbo-GGUF"}
